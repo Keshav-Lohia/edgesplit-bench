@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+models/*.gguf
+results_mock/
+.venv/
+
+notes.md
+INSTRUCTIONS.md
+LEARNING_NOTES.md
+REPORT_TEMPLATE.md

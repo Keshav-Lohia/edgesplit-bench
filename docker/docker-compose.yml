@@ -1,0 +1,39 @@
+# 1 client + 3 workers on one bridge network. PID 1 is `sleep infinity`;
+# the Python harness starts rpc-server inside the workers (so it can restart them
+# with a different thread count) and shapes the network with tc/netem (NET_ADMIN).
+name: edgesplit
+
+x-node: &node
+  image: edgesplit:latest
+  command: ["sleep", "infinity"]
+  cap_add: [NET_ADMIN]
+  networks: [edge]
+
+services:
+  client:
+    <<: *node
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: es-client
+    hostname: client
+    cpus: 4
+    volumes: ["../models:/models:ro"]
+  w1:
+    <<: *node
+    container_name: es-w1
+    hostname: w1
+    cpus: 4
+  w2:
+    <<: *node
+    container_name: es-w2
+    hostname: w2
+    cpus: 4
+  w3:
+    <<: *node
+    container_name: es-w3
+    hostname: w3
+    cpus: 4
+
+networks:
+  edge: {}
